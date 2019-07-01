@@ -10,6 +10,7 @@ x.write()
 """
 import os
 import xlwt
+from xlwt.Style import XFStyle
 
 
 class Field:
@@ -19,6 +20,18 @@ class Field:
 
     def __str__(self):
         return '<%s:%s>' % (self.__class__.__name__, self.name)
+    
+    
+class SimpleField(Field):
+    def __init__(self, name):
+        super(SimpleField, self).__init__(name, XFStyle())
+
+
+class DataField(Field):
+    def __init__(self, name):
+        style = XFStyle()
+        style.num_format_str = 'YYYY-MM-DD h:mm:ss'
+        super(DataField, self).__init__(name, style)
 
 
 class XLSMetaClass(type):
@@ -70,10 +83,13 @@ class Xls(metaclass=XLSMetaClass):
 
 if __name__ == '__main__':
     class test(Xls):
-        xm = Field('xm', xlwt.Style.XFStyle())
-        kh = Field('kh', xlwt.Style.XFStyle())
+        xm = SimpleField('xm')
+        data = DataField('data')
 
 
-    x = test([('xsha', '123'), ('xzhang', '456')])
+    import datetime
+    now = datetime.datetime.now()
+    now2 = datetime.datetime(2019, 7, 1, 21, 11, 46, 267838)
+    x = test([('xsha', now), ('xzhang', now2)])
     print(x.__nontitle__)
     x.save('666.xls')
