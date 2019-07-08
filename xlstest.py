@@ -10,7 +10,8 @@ x.write()
 """
 import os
 import xlwt
-from xlwt.Style import XFStyle
+# from xlwt.Style import XFStyle
+ezxf = xlwt.easyxf
 
 
 class Field:
@@ -24,14 +25,12 @@ class Field:
     
 class SimpleField(Field):
     def __init__(self, name):
-        super(SimpleField, self).__init__(name, XFStyle())
+        super(SimpleField, self).__init__(name, ezxf())
 
 
-class DataField(Field):
+class DateField(Field):
     def __init__(self, name):
-        style = XFStyle()
-        style.num_format_str = 'YYYY-MM-DD h:mm:ss'
-        super(DataField, self).__init__(name, style)
+        super(DateField, self).__init__(name, ezxf(num_format_str='yyyy-mm-dd HH:MM:SS'))
 
 
 class XLSMetaClass(type):
@@ -84,7 +83,7 @@ class Xls(metaclass=XLSMetaClass):
 if __name__ == '__main__':
     class test(Xls):
         xm = SimpleField('xm')
-        data = DataField('data')
+        data = DateField('data')
 
 
     import datetime
