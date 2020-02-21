@@ -15,8 +15,8 @@ class WeMSG:
         self._push()
 
     def _push(self):
-        params = {"text":self.title, "desp":self.message}
-        r = requests.get(url=self.URL, params=params)
+        postdata = dict(text=self.title, desp=self.message)
+        r = requests.post(url=self.URL, data=postdata)
         self._response = r.json()
 
     @property
@@ -25,5 +25,9 @@ class WeMSG:
 
 
 if __name__ == "__main__":
-    x = WeMSG()
+    title = 'MD语法测试2'
+    msg = """# Title
+![avatar](http://img4.imgtn.bdimg.com/it/u=2738385902,262523522&fm=26&gp=0.jpg)
+"""
+    x = WeMSG(title, msg)
     print(x.response)
